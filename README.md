@@ -1,146 +1,110 @@
 
-# 📊 PHPReportingClass
+# 💾 phpDbClass
 
-PHP ile HTML tabanlı raporlar oluşturmanın kolay ve hafif yolu: **PHPReportingClass**. Bu sınıf, dinamik olarak tablo oluşturmanızı sağlar ve sade arayüzüyle esnek bir yapı sunar.
+Basit ve sade bir PHP veritabanı sınıfı ile PDO tabanlı veritabanı işlemlerini kolaylaştırın. **phpDbClass**, veritabanı bağlantısı, sorgu çalıştırma ve kayıt işlemlerini sade bir arayüzle sunar.
 
-![PHP Reporting Class](https://img.shields.io/badge/PHP-ReportingClass-blue)  
+![PHP DB Class](https://img.shields.io/badge/PHP-DatabaseClass-blue)  
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
 ---
 
-## ✨ Özellikler
+## 🚀 Özellikler
 
-- ✅ Dinamik HTML tablo üretimi  
-- ✅ Kolay entegre edilebilir sınıf yapısı  
-- ✅ Header ve veri seti tanımlama  
-- ✅ Özelleştirilebilir CSS sınıfları  
-- ✅ Hafif ve sade çözüm
+- ✅ PDO tabanlı güvenli bağlantı  
+- ✅ Hazır sorgular ve dinamik veri işlemleri  
+- ✅ Insert, update, delete, select işlemleri  
+- ✅ Hata yakalama ve basit debug  
+- ✅ Kolay yapılandırma ve kullanım
 
 ---
 
-## 📁 Dosya Yapısı
+## 🧩 Dosya Yapısı
 
 ```
-PHPReportingClass/
-├── example.php          → Örnek kullanım dosyası
-├── Reporting.php        → Ana sınıf dosyası
-└── README.md            → Açıklama ve yönergeler
+phpDbClass/
+├── db.class.php         → Veritabanı sınıfı
+├── example.php          → Örnek kullanım
+└── README.md            → Açıklamalar
 ```
 
 ---
 
 ## ⚙️ Kurulum
 
-Projeyi klonlayın veya doğrudan `Reporting.php` dosyasını projenize ekleyin:
-
 ```bash
-git clone https://github.com/haktanakdag/PHPReportingClass.git
+git clone https://github.com/haktanakdag/phpDbClass.git
 ```
 
-Kullanım için:
-
-```php
-require_once 'Reporting.php';
-```
+veya sadece `db.class.php` dosyasını kendi projenize ekleyin.
 
 ---
 
-## 🚀 Hızlı Başlangıç
+## 🧪 Kullanım
 
-### 1. Sınıfı başlat
-
-```php
-$report = new Reporting();
-```
-
-### 2. Başlıkları tanımla
+### 1. Bağlantı Başlatma
 
 ```php
-$report->setHeaders(['ID', 'İsim', 'Soyisim', 'E-posta']);
+require_once 'db.class.php';
+
+$db = new DB("localhost", "veritabani_adi", "kullanici_adi", "parola");
 ```
 
-### 3. Verileri ekle
+### 2. SELECT Örneği
 
 ```php
-$data = [
-    [1, 'Haktan', 'Akdağ', 'haktan@example.com'],
-    [2, 'Ayşe', 'Yılmaz', 'ayse@example.com'],
-];
-$report->setRows($data);
-```
+$kullanicilar = $db->select("SELECT * FROM users WHERE status = ?", [1]);
 
-### 4. Raporu oluştur
-
-```php
-echo $report->render();
-```
-
----
-
-## 💡 Örnek HTML Çıktı
-
-```html
-<table class="reporting-table">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>İsim</th>
-      <th>Soyisim</th>
-      <th>E-posta</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>Haktan</td>
-      <td>Akdağ</td>
-      <td>haktan@example.com</td>
-    </tr>
-  </tbody>
-</table>
-```
-
----
-
-## 🎨 Stil Özelleştirme
-
-```php
-$report->setTableClass('table table-striped');
-$report->setHeaderClass('header');
-$report->setRowClass('row');
-```
-
-Varsayılan CSS örneği:
-
-```css
-.reporting-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.reporting-table th, .reporting-table td {
-  padding: 8px;
-  border: 1px solid #ccc;
-}
-.reporting-table th {
-  background-color: #f2f2f2;
+foreach ($kullanicilar as $kullanici) {
+    echo $kullanici['name'];
 }
 ```
 
+### 3. INSERT Örneği
+
+```php
+$ekle = $db->insert("INSERT INTO users (name, email) VALUES (?, ?)", ['Haktan', 'haktan@example.com']);
+```
+
+### 4. UPDATE Örneği
+
+```php
+$guncelle = $db->update("UPDATE users SET status = ? WHERE id = ?", [0, 1]);
+```
+
+### 5. DELETE Örneği
+
+```php
+$sil = $db->delete("DELETE FROM users WHERE id = ?", [2]);
+```
+
 ---
 
-## 🤝 Katkı
+## ❗ Hata Ayıklama
 
-1. Fork oluşturun  
-2. Yeni bir branch açın (`feature/yenilik`)  
-3. Değişiklikleri commit'leyin  
-4. Pull request gönderin
+Sınıf içinde `$debug` özelliğini aktif ederek çalıştırılan sorguları görebilirsiniz:
+
+```php
+$db->debug = true;
+```
+
+---
+
+## 🧰 Yapılandırma Parametreleri
+
+| Parametre      | Açıklama            |
+|----------------|---------------------|
+| host           | Veritabanı sunucusu |
+| dbname         | Veritabanı adı      |
+| user           | Kullanıcı adı       |
+| password       | Parola              |
 
 ---
 
 ## 📄 Lisans
 
-MIT Lisansı ile lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakın.
+Bu proje MIT lisansı ile lisanslanmıştır.
 
 ---
 
-> Hazırlayan: [Haktan Akdağ](https://github.com/haktanakdag)
+> Hazırlayan: [Haktan Akdağ](https://github.com/haktanakdag)  
+> Hafif ve pratik PDO sınıfıyla veritabanı işlemleri çok kolay!
